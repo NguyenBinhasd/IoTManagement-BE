@@ -1,0 +1,55 @@
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "admin1",
+    "password": "admin123"
+}
+
+
+###
+
+
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "123456"
+}
+
+
+###
+
+
+POST http://localhost:5000/api/room
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQzYmRjMGNiNjI0MzAzNjA3MTVmNzYiLCJpYXQiOjE2NDkxMjI0ODJ9.himi89X-mlfwb871QSbZsTTn1TuJz6p9PWLmCUx2Jso
+
+{
+    "roomName": "test"
+}
+
+###
+
+GET http://localhost:5000/api/room
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQzYmRjMGNiNjI0MzAzNjA3MTVmNzYiLCJpYXQiOjE2NDkxMjI0ODJ9.himi89X-mlfwb871QSbZsTTn1TuJz6p9PWLmCUx2Jso
+
+###
+
+PUT http://localhost:5000/api/room/624983e05d864b6a68a125fb
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQzYmRjMGNiNjI0MzAzNjA3MTVmNzYiLCJpYXQiOjE2NDkxMjI0ODJ9.himi89X-mlfwb871QSbZsTTn1TuJz6p9PWLmCUx2Jso
+
+{
+    "deviceName": "Camra",
+    "type": "Camera",
+    "status" : "On"
+}
+
+###
+
+DELETE http://localhost:5000/api/post/623b1a87d336897f3d52892b
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjNhZjZkMzE4NjMxYTM0NTBkNmJmZjEiLCJpYXQiOjE2NDgwNDQzMDB9.MaMIi12b9PVBC6NcUOQ57R5yg1hAKnIfrp_i_3CIaNk
