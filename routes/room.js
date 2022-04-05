@@ -4,75 +4,70 @@ const verifyToken = require('../middleware/auth');
 
 const Room = require('../models/Room');
 
-//GET api/post
-//access Private
-router.get('/', verifyToken, async(req, res) => {
-    try {
-        const room = await Room.find({user: req.userId}).populate('user', ['username']) 
+
+router.get('/', verifyToken, async (req, res) => {
+    try{
+        const room = await Room.find({user: req.userId}).populate('user', ['username']);
+
         await res.json({success: true, room});
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({success: false, message: 'Internal server error'});
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({success: false, message: "Internal server error"});
     }
 });
 
 
 
-//POST api/post
-//create post
-//access Private
-router.post('/',verifyToken, async (req, res) => {
+
+router.post('/', verifyToken, async (req, res) => {
     const {roomName} = req.body;
 
-    if(!roomName)
-        return res.status(400).json({success: false, message: 'room name is required'});
+    if(!roomName) 
+        return res.status(400).json({success: false, message:"Room name is required"});
 
     try{
         const newRoom = new Room({
             name: roomName,
-            devices: []
+            devices: [],
+            user: req.userId
         });
         await newRoom.save();
+        res.json({success: true, message: "Room created successfully", room: newRoom});
 
-        res.json({success: true, message: 'Room was created successfully', room: newRoom});
-
-    } catch(err) {
-        console.error(err);
-        res.status(500).json({success: false, message: 'Internal server error'});
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({success: false, message:"Internal server error"});
     }
 });
 
 
-//PUT api/post/
-//update post
-//access Private
 router.put('/:id', verifyToken, async (req, res) => {
     const {deviceName, type, status} = req.body;
 
-    if(!deviceName) 
-        return res.status(400).json({success: false, message: "Device name is required"}); 
+    if(!deviceName)
+        return res.status(400).json({success: false, message:"Device name is required"});
 
-    try{
+    try {
         let newDevice = {
             "name": deviceName,
             "type": type,
             "status": status
         }
 
-        const addDeviceCondition =  {_id: req.params.id, user: req.userId}
+        const addDeviceCondition = {_id: req.params.id, user: req.userId}
 
-        const updateRoom = await Room.findOneAndUpdate(addDeviceCondition, { $push: { devices: newDevice  } }, {new: true});
+        newDevice = await Room.findOneAndUpdate(addDeviceCondition, {$push: {devices: newDevice}},{ new: true });
 
-        //check dieu kien, khi ma post vua ko co id = param vua ko co id = req.userId
+        if(!newDevice) 
+            return res.status(401).json({success: false, message: 'Room not found or you dont have enough permit to add more devices'});
 
-        if(!updateRoom) 
-            return res.status(401).json({success: false, message: 'Post not found or you dont have enough permit to update this post'});
+        res.json({success: true, message: "Add device Successfully", device: newDevice});
 
-        res.json({success: true, message:'Add Device Successfully', device: updateRoom});
-    } catch(err){
-        console.error(err);
-        res.status(500).json({success: false, message: 'Internal server error'});
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({success: false, message:"Internal server error"});
     }
+
 });
 
 
